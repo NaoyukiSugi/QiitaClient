@@ -8,34 +8,28 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.ProgressBar
 import com.example.naoyukisugi.qiitaclient.client.ArticleClient
-import com.example.naoyukisugi.qiitaclient.model.Article
-import com.example.naoyukisugi.qiitaclient.model.User
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle.kotlin.bindToLifecycle
 import org.jetbrains.anko.toast
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
+import butterknife.bindView
 
 class MainActivity : RxAppCompatActivity() {
 
     @Inject
     lateinit var articleClient: ArticleClient
 
+    val listView: ListView by bindView(R.id.list_view)
+    val progressBar: ProgressBar by bindView(R.id.progress_bar)
+    val searchButton: Button by bindView(R.id.search_button)
+    val queryEditText: EditText by bindView(R.id.query_edit_text)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as QiitaClientApp).component.inject(this)
         setContentView(R.layout.activity_main)
-
-        val listView = findViewById(R.id.list_view) as ListView
-        val progressBar = findViewById(R.id.progress_bar) as ProgressBar
-        val queryEditText = findViewById(R.id.query_edit_text) as EditText
-        val searchButton = findViewById(R.id.search_button) as Button
 
         val listAdapter = ArticleListAdapter(applicationContext)
         listView.adapter = listAdapter
@@ -43,16 +37,6 @@ class MainActivity : RxAppCompatActivity() {
             val intent = ArticleActivity.intent(this, listAdapter.articles[position])
             startActivity(intent)
         }
-
-//        val gson = GsonBuilder()
-//                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-//                .create()
-//        val retrofit = Retrofit.Builder()
-//                .baseUrl("https://qiita.com")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .build()
-//        val articleClient = retrofit.create(ArticleClient::class.java)
 
         searchButton.setOnClickListener {
             progressBar.visibility = View.VISIBLE
@@ -73,14 +57,5 @@ class MainActivity : RxAppCompatActivity() {
                     })
         }
     }
-
-
-//    //ダミー記事を生成するメソッド
-//    private fun dummyArticle(title: String, userName: String): Article =
-//            Article(id = "",
-//                    title = title,
-//                    url = "https://kotlinlang.org/",
-//                    user = User(id = "", name = userName, profileImageUrl = ""))
-
 
 }
