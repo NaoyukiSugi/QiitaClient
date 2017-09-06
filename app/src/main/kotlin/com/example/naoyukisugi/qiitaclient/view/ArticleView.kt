@@ -12,6 +12,9 @@ import com.bumptech.glide.Glide
 import com.example.naoyukisugi.qiitaclient.R
 import com.example.naoyukisugi.qiitaclient.bindView
 import com.example.naoyukisugi.qiitaclient.model.Article
+import kotlinx.android.synthetic.main.view_article.view.profile_image_view
+import kotlinx.android.synthetic.main.view_article.view.title_text_view
+import kotlinx.android.synthetic.main.view_article.view.user_name_text_view
 
 class ArticleView : FrameLayout {
     constructor(context: Context?) : super(context)
@@ -19,34 +22,14 @@ class ArticleView : FrameLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
-//    var profileImageView: ImageView? = null
-//
-//    var titleTextView: TextView? = null
-//
-//    var userNameTextView: TextView? = null
-
-
-    val profileImageView: ImageView by bindView(R.id.profile_image_view)
-
-    val titleTextView: TextView by bindView(R.id.title_text_view)
-
-    val userNameTextView: TextView by bindView(R.id.user_name_text_view)
-
-
     init {
         LayoutInflater.from(context).inflate(R.layout.view_article, this)
     }
 
-
     fun setArticle(article: Article) {
-        titleTextView.text = article.title
-        userNameTextView.text = article.user.name
-
-        Glide.with(context).load(article.user.profileImageUrl).into(profileImageView)
+        title_text_view .text = article.title
+        user_name_text_view.text = article.user.name
+        Glide.with(context).load(article.user.profileImageUrl).into(profile_image_view)
     }
-
-
-
-
 
 }
